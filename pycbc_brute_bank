@@ -56,7 +56,7 @@ parser.add_argument('--buffer-length', default=2, type=float,
 parser.add_argument('--full-resolution-buffer-length', default=None, type=float,
     help='Size of the waveform buffer in seconds for generating time-domain signals at full resolution before conversion to the frequency domain.')
 parser.add_argument('--checkpoint-file', type=str,
-    help='Path to save or load the checkpoint.')
+    help='Path to save or load the checkpoint.')                ###Saves the argument passed to store the path of the checkpoint file
 parser.add_argument('--max-signal-length', type= float,
                     help="When specified, it cuts the maximum length of the waveform model to the lengh provided")
 parser.add_argument('--sample-rate', default=2048, type=float,
@@ -410,7 +410,9 @@ if args.input_file:
     params = {k: f[k][:] for k in f}
     bank, _ = bank.check_params(gen, params, args.minimal_match)
     
-    
+###Changes here: This part of the code looks if the user has given any already existing file to load bank data from.
+###If the checkpoint file exists, it loads the data. Otherwise, if the path to a checkpoint file is given but no such file exists,
+###it will consider that file as one where the bank data is to be stored. This should help in the job not restarting from scratch if it evicts or exits the code during the run.
 if args.checkpoint_file and os.path.exists(args.checkpoint_file):
     logging.info("Loading from checkpoint file")
     f = HFile(args.checkpoint_file, 'r')
@@ -571,7 +573,9 @@ while tau0s < args.tau0_end:
             if kconv <= tolerance:
                 conv = kconv
                 break
-          
+
+        ###This part is basically a copy paste of the code to save the waveforms stored in the bank already existing below.
+        ###This will save the data during the run instead of doing it only once at the end.
         checkpoint_test = HFile('checkpoint.hdf', 'a')
         checkpoint_test.attrs['minimal_match'] = args.minimal_match
         for k in bank.keys():
