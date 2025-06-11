@@ -59,10 +59,9 @@ with h5py.File('/home/spandan.sarma/work_ecc/fitting_factor_tests/manual_ff_test
 
 inj_indices = np.arange(0, 10)
 
-#inj_hp_list={}
-#for inj_id in inj_indices:
-#    inj_hp_list[inj_id], _ = get_fd_waveform(approximant="teobresums", mass1=injection_file['mass1'][inj_id], mass2=injection_file['mass2'][inj_id], lambda1=0.,lambda2=0., spin1z=injection_file['spin1z'][inj_id], spin2z=injection_file['spin2z'][inj_id], eccentricity = injection_file['eccentricity'][inj_id], f_lower=12., delta_f=1/1024.)
-
+#The part above loads the injections I want to find the match of.
+#Below I am loading the waveforms from a pickle file. These are the waveforms from the bank that I had generated and loaded onto a pickle file.
+#The process of generating a waveform and loading them into a pickle file was a much faster process than doing it all in one python file.
 print("Injection done")
 def match_find(bank_file_gen, injection_hp_index, psd):
     start_time = time.time()
@@ -99,7 +98,8 @@ def match_find(bank_file_gen, injection_hp_index, psd):
                     bank_hp_copy = obj[list(obj.items())[0][0]].copy()
                     bank_hp_copy.resize(len(psd))
                     psd_copy = psd.copy()
-                
+
+                #Calculating the match part
                 match_values[f"bank_{list(obj.items())[0][0][15:]}_inj_{inj_id}"] = match(injection_hp_copy, bank_hp_copy, psd=psd_copy, low_frequency_cutoff=12., high_frequency_cutoff=None)[0]
                 i+=1
                 print("time for one loop inj_id {inj_id}, running in PID {os.getpid()}, {time.time() - start_time_int}")
