@@ -1,0 +1,17 @@
+universe = vanilla
+executable = /home/spandan.sarma/anaconda3/envs/pycbc_teobfd_new/bin/pycbc_brute_bank
+arguments = " --output-file $(out) --minimal-match 0.97 --tolerance 0.05 --buffer-length 4 --full-resolution-buffer-length 1024 --sample-rate 2048 --tau0-threshold 0.5 --approximant 'teobresums' --tau0-crawl $(tau0crawlval) --psd-file /home/spandan.sarma/work_ecc/bank_generation/eccentric_bank_mm97/aligo_O4high_psd.txt --seed 150914 --tau0-start $(tau0startval) --tau0-end $(tau0endval) --input-config /home/spandan.sarma/work_ecc/bank_generation/eccentric_bank_mm97/bank.ini --low-frequency-cutoff 12 --max-signal-length 512 --nprocesses 10 --verbose "
+getenv = True
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+stream_error = True
+stream_output = True
+request_cpus = 10
+accounting_group = ligo.prod.o3.cbc.bbh.pycbcoffline
+request_memory = $(diskspace)
+request_disk = $(memspace)
+log = $(logdirdag)
+error = $(errdirdag)
+output = $(outdirdag)
+notification = never
+queue 1
