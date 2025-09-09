@@ -8,7 +8,7 @@ from glue.pipeline import CondorDAGJob, CondorDAGNode, CondorDAG, CondorJob
 RUNDIR = os.getcwd()+'/'
 
 # PSD and population model paths
-psd = "/home/spandan.sarma/work_ecc/bank_generation/eccentric_bank_mm97/aligo_O4high_psd.txt"
+psd = "/home/spandan.sarma/work_ecc/bank_generation/eccentric_bank_mm97_1/aligo_O4high_psd.txt"
 bank_config = f"{RUNDIR}bank.ini"
 
 #outmax = 600
@@ -35,7 +35,6 @@ arglist = ['--output-file',
            '--full-resolution-buffer-length',
            '--sample-rate',
            '--tau0-threshold',
-           '--approximant',
            '--tau0-crawl',
            '--psd-file',
            '--seed',
@@ -50,12 +49,11 @@ arglist = ['--output-file',
 
 out = '$(out)'
 mm = 0.97
-tolerance = 0.05
+tolerance = 0.1
 bufferlen = 4
 fullresbuff = 1024
 samplerate = 2048
 tau0_threshold = 0.5
-approx = "'teobresums'"
 tau0_crawl = '$(tau0crawlval)'
 maxsignal = 512
 tau0startval = '$(tau0startval)'
@@ -75,7 +73,6 @@ argvars = [out,
           fullresbuff,
           samplerate,
           tau0_threshold,
-          approx,
           tau0_crawl,
           psd_file,
           seed,
@@ -174,6 +171,34 @@ for i in np.arange(120, 200):
     end = step * (i + 1)
     write_node(i, outputbank, log_files, err_files, out_files, start, end, crawl, '25G')
 
+for i in np.arange(500, 600):
+    step = 0.2
+    crawl = step
+    start = round(step * i, 1)
+    end = round(step * (i + 1), 1)
+    write_node(i, outputbank, log_files, err_files, out_files, start, end, crawl, '25G')
+
+
+for i in np.arange(600, 750):
+    step = 0.2
+    crawl = step
+    start = round(step * i, 1)
+    end = round(step * (i + 1), 1)
+    write_node(i, outputbank, log_files, err_files, out_files, start, end, crawl, '35G')
+
+for i in np.arange(750, 1250):
+    step = 0.2
+    crawl = step
+    start = round(step * i, 1)
+    end = round(step * (i + 1), 1)
+    write_node(i, outputbank, log_files, err_files, out_files, start, end, crawl, '50G')
+
+for i in np.arange(500, 700):
+    step = 0.5
+    crawl = step
+    start = round(step * i, 1)
+    end = round(step * (i + 1), 1)
+    write_node(i, outputbank, log_files, err_files, out_files, start, end, crawl, '15G')
 
 #for i in np.arange(546, 600):
 #    step = 0.5
